@@ -40,13 +40,7 @@ const localMenus: Menu[] = [
         icon: 'ic:outline-featured-video',
         key: 's',
         path: '/components/table',
-        children: [
-            {
-                name: 'Basic Table',
-                path: '/components/table/basic',
-                icon: 'ic:twotone-table-chart',
-                key: 'basicTable',
-            },
+        children: [           
             {
                 name: 'Basic Form',
                 path: '/components/form/basic',
