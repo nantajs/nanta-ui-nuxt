@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NantaButton>1</NantaButton>
     <NantaForm v-bind="getFormProps" :actionColOptions="{ span: 24 }" @register="registerForm" @submit="handleSubmit"
       @reset="handleReset" />
   </div>
@@ -54,8 +53,6 @@ const handleReset = () => {
 };
 
 </script>
-
-
 
 <style scoped>
 .logo {

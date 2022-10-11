@@ -1,6 +1,6 @@
-# Nuxt 3 Minimal Starter
+# nanta-ui-uxt
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+An example of using [nanta-ui](https://github.com/nantajs/nanta-ui) in Nuxt3.
 
 ## Setup
 
