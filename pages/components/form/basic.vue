@@ -1,10 +1,15 @@
+<template>
+  <div>
+    <NantaButton>1</NantaButton>
+    <NantaForm v-bind="getFormProps" :actionColOptions="{ span: 24 }" @register="registerForm" @submit="handleSubmit"
+      @reset="handleReset" />
+  </div>
+</template>
+
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { NantaButton, NantaForm, useForm, FormProps, Recordable } from '@nanta/ui'
 import { schemes } from "./data";
 import { computed } from "vue";
-
 const [
   registerForm,
   { setFieldsValue, updateSchema, resetFields, getFieldsValue, validateFields },
@@ -50,11 +55,7 @@ const handleReset = () => {
 
 </script>
 
-<template>  
-  <NantaButton>1</NantaButton>
-  <NantaForm v-bind="getFormProps" :actionColOptions="{ span: 24 }" @register="registerForm" @submit="handleSubmit"
-    @reset="handleReset" />
-</template>
+
 
 <style scoped>
 .logo {
