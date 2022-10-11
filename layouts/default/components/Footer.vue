@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer class="footer">
-    <a href="https://github.com/sancaiwulian/nanta" target="_blank">Nanta</a> ©2022~{{new Date().getFullYear()}} Created by Sunlent
+    <a href="https://github.com/nantajs/nanta-ui" target="_blank">NANTA-UI</a> ©2022~{{new Date().getFullYear()}} Created by <a href="https://github.com/nantajs" target="_blank">nantajs</a>.
   </a-layout-footer>
 </template>
 

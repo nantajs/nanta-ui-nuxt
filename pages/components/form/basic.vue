@@ -24,7 +24,7 @@ const customizeResetFn = (): Promise<void> => {
   console.log("here is a customize resetFn called!");
   setFieldsValue({
     age: 0,
-    email: "nanta@sancaiwulian.com",
+    email: "nanta-ui@nantajs.dev",
     name: "Nanta",
   });
   return new Promise((resolve, reject) => {
