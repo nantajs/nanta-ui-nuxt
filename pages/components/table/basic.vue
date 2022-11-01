@@ -1,168 +1,257 @@
 <template>
-  <div>
-    <div style="margin-bottom: 1rem;">
-      <a-button type="primary" @click="handleCreateNew" style="margin-right: .5rem;">
-        <Icon name="uil:plus" />Create New
-      </a-button>
-      <a-button color="success" type="primary" @click="handleEdit" style="margin-right: .5rem;">
-        <Icon name="uil:edit" />Edit
-      </a-button>
-    </div>
-    <a-table :columns="columns" :data-source="data">
-      <template #headerCell="{ column }">
-        <template v-if="column.key === 'name'">
-          <span>
-            <smile-outlined />
-            Name
-          </span>
-        </template>
+  <NantaTable @register="registerTable"
+      >
+      <template #toolbar>
+          <div style="margin-bottom: 10px;">
+              <NantaButton type="primary" @click="handleCopyCreate" :disabled="!operation.copyEnabled"
+                  class="button-s" preIcon="ic:baseline-content-copy">Copy create</NantaButton>
+              <NantaButton type="primary" @click="handleCreate" :disabled="!operation.createEnabled" class="button-s"
+                  preIcon="ic:baseline-plus">Create new</NantaButton>
+              <NantaButton color="success" type="primary" @click="handleModify" :disabled="!operation.modifyEnabled"
+                  class="button-s" preIcon="ic:baseline-edit">Modify</NantaButton>
+              <NantaButton type="primary" danger @click="handleMultiDelete" :disabled="!operation.deleteEnabled"
+                  class="button-s" preIcon="ic:baseline-delete">Delete</NantaButton>
+          </div>
+          
       </template>
-
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'name'">
-          <a>
-            {{ record.name }}
-          </a>
-        </template>
-        <template v-else-if="column.key === 'tags'">
-          <span>
-            <a-tag v-for="tag in record.tags" :key="tag"
-              :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
-              {{ tag.toUpperCase() }}
-            </a-tag>
-          </span>
-        </template>
-        <template v-else-if="column.key === 'action'">
-          <span>
-            <a @click="handleEdit(record)">Edit</a>
-            <a-divider type="vertical" />
-            <a-popconfirm title="Sure to delete?" @confirm="onDeleteUser(record.key)">
-              <IconRiDeleteBin6Line style="color: red; cursor: pointer" />
-            </a-popconfirm>
-          </span>
-        </template>
+          <template v-if="column.key === 'action'">
+              <NantaTableAction :actions="getAction(record)" />
+          </template>
+          <template v-else-if="column.key === 'tags'">
+              <span>
+                  <a-tag v-for="tag in record.tags" :key="tag"
+                      :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
+                      {{ tag.toUpperCase() }}
+                  </a-tag>
+              </span>
+          </template>
       </template>
-    </a-table>
-
-    <a-button type="primary" @click="showModal">Open Modal</a-button>
-    <EditModal :visible="visible" :title="title" @changed="handleChange" />
-    <BasicEditModal @register="registerModal" @ok="handleOK" @cancel="handleCancel" />
-  </div>
+  </NantaTable>
+  <NantaFormModal @register="registerModal" v-bind="mProps" @ok="handleOK" @cancel="handleCancel" />
+  <NantaFormModal @register="registerModal2" v-bind="mProps2" @ok="handleOK2" @cancel="handleCancel2" />
 </template>
 
 <script lang="ts" setup>
-import { SmileOutlined, DownOutlined } from "@ant-design/icons-vue";
-import EditModal from "./EditModal.vue";
-import BasicEditModal from "./BasicEditModal.vue";
-import { useModal } from "@nanta/ui";
-const columns = [
-  {
-    name: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-  },
-  {
-    title: "Action",
-    key: "action",
-  },
-];
+import { ref } from "vue";
+import { NantaTable, NantaTableAction, useTable, ActionItem, NantaFormModal, ModalInnerRecord, NantaFormModalProps, NantaButton, useModal,  ModalProps, Recordable } from "@nanta/ui";
+import { columns, data, searchFormSchema, editModalSchema, editModalSchema2 } from "./data"
+import { ActionType } from './type'
+//import { createAxiosFetch } from '/@/utils/http/axiosFetch';
+// import { url } from '/@/settings/localSetting';
+const url = 'https://mock.data/api/mock/meta';
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    email: "john.brown@gmail.com",
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    email: "jim.green@gmail.com",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    email: "joe.black@gmail.com",
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
+const checkedKeys = ref<Array<string | number>>([]);
+const operation = ref({ copyEnabled: false, createEnabled: true, modifyEnabled: false, deleteEnabled: false });
 
-// Basic Model的示例
-const [registerModal, { openModal }] = useModal();
+function getAction(record: Recordable): ActionItem[] {
+  const ifShow = (action: ActionItem) => {
+      const value = (record.gender && (record.gender === 1 || record.gender === 2));
+      if (!value && action.label === 'Delete') {
+          return false;
+      }
+      return true;
+  };
 
-const handleCreateNew = () => {
-  console.log('basic modal show')
-  openModal(true, {
-    isUpdate: false,
-    record: null,
+  const actions: ActionItem[] = [
+      {
+          icon: 'clarity:note-edit-line',
+          label: 'Edit',
+          onClick: handleEdit.bind(null, record),
+      },
+      {
+          icon: 'ant-design:delete-outlined',
+          color: 'error',
+          label: 'Delete',
+          onClick: handleDelete.bind(null, record),
+      },
+  ]
+  actions.forEach(item => { item.ifShow = ifShow })
+
+  return actions;
+}
+
+interface DemoResult {
+  createBy?: string;
+  updateBy?: string;
+  createTime?: number;
+  updateTime?: number;
+  id: number;
+  articleid: string;
+  title: string;
+  desc: string;
+  tags?: string;
+  space?: string;
+  category?: string;
+  refArticleid?: string;
+}
+
+function transfer(params: DemoResult[]) {
+  const tData = params.map((item) => {
+      return {
+          key: item.articleid,
+          name: item.title,
+          age: item.id,
+          email: item.space,
+          address: item.desc.substring(0, 10),
+          tags: [item.tags],
+          gender: 1,
+      }
   })
+  console.log(tData)
+  return tData;
 }
 
-const handleOK = () => {
-  console.log('handle ok in outer event callback')
+const fetchSetting = {
+  pageField: 'page',
+  sizeField: 'pageSize',
+  listField: 'content',
+  totalField: 'totalElements',
+};
+
+const [registerTable, { updateTableDataRecord, deleteTableDataRecord, findTableDataRecord }] = useTable({
+  title: 'This is title',
+  columns,
+  dataSource: data,
+  // api: createAxiosFetch(url),
+  afterFetch: transfer,
+  fetchSetting,
+  actionColumn: {
+      title: 'Actions',
+      dataIndex: 'action',
+      // slots: { customRender: 'action' },
+      fixed: undefined,
+  },
+  useSearchForm: false,
+  searchFormConfig: {
+      labelWidth: 120,
+      schemas: searchFormSchema,
+      autoSubmitOnEnter: true,
+      submitButtonOptions: { text: 'search' }
+  },
+})
+
+const mProps: NantaFormModalProps = {
+  schemas: editModalSchema,
+  colon: true,
+  modalProps: {
+      okText: "I'm sure.",
+      cancelText: 'Reject',
+  }
 }
 
-const handleCancel = () => {
-  console.log('handle cancel in outer evnet callback');
+const [registerModal, { openModal, closeModal, setModalProps }] = useModal();
+
+const mProps2: NantaFormModalProps = {
+  schemas: editModalSchema2,
+  colon: true
 }
 
-// end
+const [registerModal2, { openModal: openModal2, closeModal: closeModal2 }] = useModal();
 
-const onDeleteUser = (id: string | number) => {
-  console.log("id click deleted, ", id);
-};
+const handleOK = (newRecord: Recordable, oldRecord: Recordable) => {
+  console.log('handle ok in outer event callback', newRecord, oldRecord)
+  updateTableDataRecord(oldRecord.key, newRecord)
+  closeModal()
+}
 
-const mdata = {
-  visible: false,
-};
+const handleCancel = (newRecord: Recordable, oldRecord: Recordable) => {
+  console.log('handle cancel in outer event callback', newRecord, oldRecord);
+}
 
-const visible = ref<boolean>(false);
-const title = "Edit";
+const handleOK2 = (newRecord: Recordable, oldRecord: Recordable) => {
+  console.log('handle ok in outer event callback', newRecord, oldRecord)
+  updateTableDataRecord(oldRecord.key, newRecord)
+  closeModal()
+}
 
-const showModal = () => {
-  console.log("showModal");
-  visible.value = true;
-};
+const handleCancel2 = (newRecord: Recordable, oldRecord: Recordable) => {
+  console.log('handle cancel in outer event callback', newRecord, oldRecord);
+}
 
-const handleChange = (status) => {
-  console.log(status);
-  if ("cancel" === status || "ok" === status) {
-    visible.value = false;
+function handleEdit(record: Recordable) {
+  console.log('edit clicked!');
+  console.log(record);
+  const innerRecord: ModalInnerRecord = {
+      title: "Edit",
+      record
+  }
+
+  openModal(true, innerRecord)
+}
+
+function handleDelete(record: Recordable) {
+  console.log('delete action clicked!');
+  console.log(record);
+}
+
+function handleCopyCreate() {
+  console.log('copycreate');
+  if (checkedKeys.value.length > 0) {
+      const key = checkedKeys.value[0];
+      const record = findTableDataRecord(key)
+      doModifyAction(key, ActionType.COPY_CREATE, record as Recordable);
+  }
+}
+
+function handleCreate() {
+  doModifyAction(0, ActionType.CREATE);
+}
+
+function handleModify() {
+  console.log('modify');
+  if (checkedKeys.value.length > 0) {
+      const key = checkedKeys.value[0];
+      const record = findTableDataRecord(key)
+      doModifyAction(key, ActionType.MODIFY, record as Recordable);
+  }
+}
+
+function handleMultiDelete() {
+  console.log('delete', checkedKeys);
+}
+
+const doModifyAction = (id: string | number, type: ActionType, record?: Recordable) => {
+  console.log('id', id, 'type', type);
+  let title: string = "Create"
+  if (type == ActionType.CREATE) {
+      title = "Create"
+  } else if (type == ActionType.COPY_CREATE) {
+      title = "Copy create"
+  } else if (type == ActionType.MODIFY) {
+      title = "Modify"
+  } else {
+      throw new Error('illegal type.');
+  }
+
+  const innerRecord: ModalInnerRecord = {
+      title,
+      record: record || {}
+  }
+
+  if (type == ActionType.CREATE) {
+      openModal2(true, innerRecord);
+  } else {
+      openModal(true, innerRecord)
   }
 };
 
-const handleEdit = (record) => {
-  console.log(record);
-  openModal(true, {
-    isUpdate: true,
-    record
-  })
-};
+function onSelectChange(selectedRowKeys: (string | number)[]) {
+  console.log(selectedRowKeys);
+  checkedKeys.value = selectedRowKeys;
+  const size = selectedRowKeys.length;
+  if (size <= 0) {
+      operation.value = { copyEnabled: false, createEnabled: true, modifyEnabled: false, deleteEnabled: false };
+  } else if (size == 1) {
+      operation.value = { copyEnabled: true, createEnabled: true, modifyEnabled: true, deleteEnabled: true };
+  } else {
+      operation.value = { copyEnabled: false, createEnabled: true, modifyEnabled: false, deleteEnabled: true };
+  }
+}
 </script>
+
+<style scoped>
+.button-s {
+  margin-right: 4px;
+}
+</style>
