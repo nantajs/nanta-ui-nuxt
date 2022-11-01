@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { NantaTable, NantaTableAction, useTable, ActionItem, NantaFormModal, ModalInnerRecord, NantaFormModalProps, NantaButton, useModal,  ModalProps, Recordable } from "@nanta/ui";
+import { NantaTable, NantaTableAction, useTable, ActionItem, NantaFormModal, ModalInnerRecord, NantaFormModalProps, NantaButton, useModal,  ModalProps, Recordable } from "/~/main";
 import { columns, data, searchFormSchema, editModalSchema, editModalSchema2 } from "./data"
 import { ActionType } from './type'
 //import { createAxiosFetch } from '/@/utils/http/axiosFetch';

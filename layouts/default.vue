@@ -32,8 +32,6 @@ const openKeys = ref<string[]>([]);
 
 const breadcrumbList = ref<string[]>([]);
 const sideMenus = await getAsyncMenus();
-const path = useRoute().path;
-console.log(path); // path 路径
 
 function iteratorMenu(
   item: Menu,
@@ -95,6 +93,7 @@ function findKeyPath(path: string) {
   return res;
 }
 
+const path = "/";
 const keyPath = findKeyPath(path);
 console.log(keyPath);
 if (keyPath && keyPath.length > 0) {
