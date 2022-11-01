@@ -26,13 +26,7 @@ const localMenus: Menu[] = [
                         icon: 'ic:baseline-chrome-reader-mode',
                     }
                 ]
-            },
-            {
-                name: 'Icon Search',
-                path: '/tool/icon',
-                key: 'tool',
-                icon: 'ic:twotone-local-dining',
-            },
+            },            
         ]
     },
     {
@@ -46,6 +40,12 @@ const localMenus: Menu[] = [
                 path: '/components/form/basic',
                 icon: 'quill:creditcard',
                 key: 'basicForm'
+            },
+            {
+                name: 'Basic Table',
+                path: '/components/table/basic',
+                icon: 'quill:creditcard',
+                key: 'basicTable'
             }
         ]
     }
