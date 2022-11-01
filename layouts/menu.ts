@@ -6,29 +6,7 @@ const localMenus: Menu[] = [
         icon: 'ic:baseline-home',
         key: 'dashboard',
         path: '/'
-    },
-    {
-        name: 'Pages',
-        icon: 'ic:baseline-dashboard-customize',
-        key: 'sys-setting',
-        path: '',
-        children: [
-            {
-                name: 'Menu Level 2',
-                path: '/demo',
-                key: '1',
-                icon: 'ic:twotone-cable',
-                children: [
-                    {
-                        name: 'Demo Page',
-                        path: '/demo',
-                        key: 'dddd',
-                        icon: 'ic:baseline-chrome-reader-mode',
-                    }
-                ]
-            },            
-        ]
-    },
+    },    
     {
         name: 'Components',
         icon: 'ic:outline-featured-video',

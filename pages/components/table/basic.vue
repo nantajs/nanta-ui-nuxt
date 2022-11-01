@@ -1,40 +1,39 @@
 <template>
-  <NantaTable @register="registerTable"
-      >
+  <div>
+    <NantaTable @register="registerTable">
+      <template #headerTop>
+
+        <span>headerTop content</span>
+
+      </template>
       <template #toolbar>
-          <div style="margin-bottom: 10px;">
-              <NantaButton type="primary" @click="handleCopyCreate" :disabled="!operation.copyEnabled"
-                  class="button-s" preIcon="ic:baseline-content-copy">Copy create</NantaButton>
-              <NantaButton type="primary" @click="handleCreate" :disabled="!operation.createEnabled" class="button-s"
-                  preIcon="ic:baseline-plus">Create new</NantaButton>
-              <NantaButton color="success" type="primary" @click="handleModify" :disabled="!operation.modifyEnabled"
-                  class="button-s" preIcon="ic:baseline-edit">Modify</NantaButton>
-              <NantaButton type="primary" danger @click="handleMultiDelete" :disabled="!operation.deleteEnabled"
-                  class="button-s" preIcon="ic:baseline-delete">Delete</NantaButton>
-          </div>
-          
+        <div style="margin-bottom: 10px;">
+          <a-button> 新增 </a-button>
+          <a-button> 导出 </a-button>
+        </div>
       </template>
       <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'action'">
-              <NantaTableAction :actions="getAction(record)" />
-          </template>
-          <template v-else-if="column.key === 'tags'">
-              <span>
-                  <a-tag v-for="tag in record.tags" :key="tag"
-                      :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
-                      {{ tag.toUpperCase() }}
-                  </a-tag>
-              </span>
-          </template>
+        <template v-if="column.key === 'action'">
+          <NantaTableAction :actions="getAction(record)" />
+        </template>
+        <template v-else-if="column.key === 'tags'">
+          <span>
+            <a-tag v-for="tag in record.tags" :key="tag"
+              :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
+              {{ tag.toUpperCase() }}
+            </a-tag>
+          </span>
+        </template>
       </template>
-  </NantaTable>
-  <NantaFormModal @register="registerModal" v-bind="mProps" @ok="handleOK" @cancel="handleCancel" />
-  <NantaFormModal @register="registerModal2" v-bind="mProps2" @ok="handleOK2" @cancel="handleCancel2" />
+    </NantaTable>
+    <NantaFormModal @register="registerModal" v-bind="mProps" @ok="handleOK" @cancel="handleCancel" />
+    <NantaFormModal @register="registerModal2" v-bind="mProps2" @ok="handleOK2" @cancel="handleCancel2" />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { NantaTable, NantaTableAction, useTable, ActionItem, NantaFormModal, ModalInnerRecord, NantaFormModalProps, NantaButton, useModal,  ModalProps, Recordable } from "/~/main";
+import { NantaTable, NantaTableAction, useTable, ActionItem, NantaFormModal, ModalInnerRecord, NantaFormModalProps, NantaButton, useModal, ModalProps, Recordable } from "/~/main";
 import { columns, data, searchFormSchema, editModalSchema, editModalSchema2 } from "./data"
 import { ActionType } from './type'
 //import { createAxiosFetch } from '/@/utils/http/axiosFetch';
@@ -46,25 +45,25 @@ const operation = ref({ copyEnabled: false, createEnabled: true, modifyEnabled: 
 
 function getAction(record: Recordable): ActionItem[] {
   const ifShow = (action: ActionItem) => {
-      const value = (record.gender && (record.gender === 1 || record.gender === 2));
-      if (!value && action.label === 'Delete') {
-          return false;
-      }
-      return true;
+    const value = (record.gender && (record.gender === 1 || record.gender === 2));
+    if (!value && action.label === 'Delete') {
+      return false;
+    }
+    return true;
   };
 
   const actions: ActionItem[] = [
-      {
-          icon: 'clarity:note-edit-line',
-          label: 'Edit',
-          onClick: handleEdit.bind(null, record),
-      },
-      {
-          icon: 'ant-design:delete-outlined',
-          color: 'error',
-          label: 'Delete',
-          onClick: handleDelete.bind(null, record),
-      },
+    {
+      icon: 'clarity:note-edit-line',
+      label: 'Edit',
+      onClick: handleEdit.bind(null, record),
+    },
+    {
+      icon: 'ant-design:delete-outlined',
+      color: 'error',
+      label: 'Delete',
+      onClick: handleDelete.bind(null, record),
+    },
   ]
   actions.forEach(item => { item.ifShow = ifShow })
 
@@ -88,15 +87,15 @@ interface DemoResult {
 
 function transfer(params: DemoResult[]) {
   const tData = params.map((item) => {
-      return {
-          key: item.articleid,
-          name: item.title,
-          age: item.id,
-          email: item.space,
-          address: item.desc.substring(0, 10),
-          tags: [item.tags],
-          gender: 1,
-      }
+    return {
+      key: item.articleid,
+      name: item.title,
+      age: item.id,
+      email: item.space,
+      address: item.desc.substring(0, 10),
+      tags: [item.tags],
+      gender: 1,
+    }
   })
   console.log(tData)
   return tData;
@@ -117,17 +116,17 @@ const [registerTable, { updateTableDataRecord, deleteTableDataRecord, findTableD
   afterFetch: transfer,
   fetchSetting,
   actionColumn: {
-      title: 'Actions',
-      dataIndex: 'action',
-      // slots: { customRender: 'action' },
-      fixed: undefined,
+    title: 'Actions',
+    dataIndex: 'action',
+    // slots: { customRender: 'action' },
+    fixed: undefined,
   },
   useSearchForm: false,
   searchFormConfig: {
-      labelWidth: 120,
-      schemas: searchFormSchema,
-      autoSubmitOnEnter: true,
-      submitButtonOptions: { text: 'search' }
+    labelWidth: 120,
+    schemas: searchFormSchema,
+    autoSubmitOnEnter: true,
+    submitButtonOptions: { text: 'search' }
   },
 })
 
@@ -135,8 +134,8 @@ const mProps: NantaFormModalProps = {
   schemas: editModalSchema,
   colon: true,
   modalProps: {
-      okText: "I'm sure.",
-      cancelText: 'Reject',
+    okText: "I'm sure.",
+    cancelText: 'Reject',
   }
 }
 
@@ -173,8 +172,8 @@ function handleEdit(record: Recordable) {
   console.log('edit clicked!');
   console.log(record);
   const innerRecord: ModalInnerRecord = {
-      title: "Edit",
-      record
+    title: "Edit",
+    record
   }
 
   openModal(true, innerRecord)
@@ -188,9 +187,9 @@ function handleDelete(record: Recordable) {
 function handleCopyCreate() {
   console.log('copycreate');
   if (checkedKeys.value.length > 0) {
-      const key = checkedKeys.value[0];
-      const record = findTableDataRecord(key)
-      doModifyAction(key, ActionType.COPY_CREATE, record as Recordable);
+    const key = checkedKeys.value[0];
+    const record = findTableDataRecord(key)
+    doModifyAction(key, ActionType.COPY_CREATE, record as Recordable);
   }
 }
 
@@ -201,9 +200,9 @@ function handleCreate() {
 function handleModify() {
   console.log('modify');
   if (checkedKeys.value.length > 0) {
-      const key = checkedKeys.value[0];
-      const record = findTableDataRecord(key)
-      doModifyAction(key, ActionType.MODIFY, record as Recordable);
+    const key = checkedKeys.value[0];
+    const record = findTableDataRecord(key)
+    doModifyAction(key, ActionType.MODIFY, record as Recordable);
   }
 }
 
@@ -215,24 +214,24 @@ const doModifyAction = (id: string | number, type: ActionType, record?: Recordab
   console.log('id', id, 'type', type);
   let title: string = "Create"
   if (type == ActionType.CREATE) {
-      title = "Create"
+    title = "Create"
   } else if (type == ActionType.COPY_CREATE) {
-      title = "Copy create"
+    title = "Copy create"
   } else if (type == ActionType.MODIFY) {
-      title = "Modify"
+    title = "Modify"
   } else {
-      throw new Error('illegal type.');
+    throw new Error('illegal type.');
   }
 
   const innerRecord: ModalInnerRecord = {
-      title,
-      record: record || {}
+    title,
+    record: record || {}
   }
 
   if (type == ActionType.CREATE) {
-      openModal2(true, innerRecord);
+    openModal2(true, innerRecord);
   } else {
-      openModal(true, innerRecord)
+    openModal(true, innerRecord)
   }
 };
 
@@ -241,11 +240,11 @@ function onSelectChange(selectedRowKeys: (string | number)[]) {
   checkedKeys.value = selectedRowKeys;
   const size = selectedRowKeys.length;
   if (size <= 0) {
-      operation.value = { copyEnabled: false, createEnabled: true, modifyEnabled: false, deleteEnabled: false };
+    operation.value = { copyEnabled: false, createEnabled: true, modifyEnabled: false, deleteEnabled: false };
   } else if (size == 1) {
-      operation.value = { copyEnabled: true, createEnabled: true, modifyEnabled: true, deleteEnabled: true };
+    operation.value = { copyEnabled: true, createEnabled: true, modifyEnabled: true, deleteEnabled: true };
   } else {
-      operation.value = { copyEnabled: false, createEnabled: true, modifyEnabled: false, deleteEnabled: true };
+    operation.value = { copyEnabled: false, createEnabled: true, modifyEnabled: false, deleteEnabled: true };
   }
 }
 </script>
