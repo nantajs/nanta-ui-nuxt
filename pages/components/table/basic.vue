@@ -7,7 +7,7 @@
 
       </template>
       <template #toolbar>
-        <div style="margin-bottom: 10px;">
+        <div>
           <a-button> 新增 </a-button>
           <a-button> 导出 </a-button>
         </div>
@@ -109,7 +109,7 @@ const fetchSetting = {
 };
 
 const [registerTable, { updateTableDataRecord, deleteTableDataRecord, findTableDataRecord }] = useTable({
-  title: 'This is title',
+  title: 'This is title&',
   columns,
   dataSource: data,
   // api: createAxiosFetch(url),
