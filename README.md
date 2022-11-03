@@ -1,4 +1,5 @@
-# nanta-ui-uxt
+# nanta-ui-uxt  
+[![cd](https://github.com/nantajs/nanta-ui-nuxt/actions/workflows/cd.yml/badge.svg)](https://github.com/aborn/mindpress/actions/workflows/cd.yml)
 
 An example of using [nanta-ui](https://github.com/nantajs/nanta-ui) in Nuxt3.
 
