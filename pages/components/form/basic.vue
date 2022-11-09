@@ -2,13 +2,25 @@
   <div>
     <NantaForm v-bind="getFormProps" :actionColOptions="{ span: 24 }" @register="registerForm" @submit="handleSubmit"
       @reset="handleReset" />
+
+    <NantaButton @click="clickFormModal">NantaFormModal</NantaButton>
+
+    <NantaFormModal @register="registerFormModal" v-bind="mProps" @ok="onSubmit">
+      <template #selectTag="{ model, field, schema }">
+        <a-select :options="optionsTag" mode="tags" :token-separators="[',']" v-model:value="model[field]"
+          :placeholder="schema.placeholder" allowClear />
+      </template>
+    </NantaFormModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { NantaButton, NantaForm, useForm, FormProps, Recordable } from '@nanta/ui'
-import { schemes } from "./data";
+import { NantaButton, NantaForm, useForm, FormProps, Recordable, useModal, NantaFormModalProps, NantaFormModal } from '@nanta/ui'
+import { schemes, editModalSchema } from "./data";
 import { computed } from "vue";
+import type { SelectProps } from 'ant-design-vue';
+import { ref } from 'vue';
+
 const [
   registerForm,
   { setFieldsValue, updateSchema, resetFields, getFieldsValue, validateFields },
@@ -19,6 +31,31 @@ const [
     span: 24,
   },
 });
+
+const optionsTag = ref<SelectProps['options']>([
+]);
+
+const mProps: NantaFormModalProps = {
+  schemas: editModalSchema,
+  colon: true,
+  modalProps: {
+    okText: "确定",
+    cancelText: '取消',
+  }
+}
+
+const [registerFormModal, { openModal: openFormModal, closeModal, changeLoading }] = useModal();
+
+function onSubmit(newValue: Recordable, oldValue: Recordable) {
+  console.log('newValue:', newValue, 'oldValue:', oldValue)
+}
+
+function clickFormModal() {
+  openFormModal(true, {
+    title: "Nanta Form Modal",
+    record: { name: "Aborn Jiang", id: "20220412", tags: ['init', 'ie'] },
+  });
+}
 
 const customizeResetFn = (): Promise<void> => {
   console.log("here is a customize resetFn called!");
