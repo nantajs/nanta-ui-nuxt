@@ -426,14 +426,14 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@nanta/ui@0.1.0-rc.7":
-  version "0.1.0-rc.7"
-  resolved "https://registry.npmjs.org/@nanta/ui/-/ui-0.1.0-rc.7.tgz#6376901c3b874bdb7ba3de5d98926b4c8804b31b"
-  integrity sha512-0yfhmEPTXMh0CpEQ8+zihkD9fKLr2lfwmDMotyLDqllG4JA9VBDxpdx/GdeLDBlVi+1DLXfWqLQXMFAztGy04Q==
+"@nanta/ui@0.1.0-rc.9":
+  version "0.1.0-rc.9"
+  resolved "https://registry.npmjs.org/@nanta/ui/-/ui-0.1.0-rc.9.tgz#c20eca5bb58ea5faecac45a5693710f2578b07b5"
+  integrity sha512-9TbEABeineuuBFmw20WtZSdJCIinb5s6ebQLUzAD7WOYTWMoNirOtdhvWjW9bMgFQihTnJh0my5KSikOd0Zheg==
   dependencies:
     "@ant-design/icons-vue" "^6.1.0"
     "@vueuse/core" "^9.4.0"
-    ant-design-vue "^3.3.0-beta.3"
+    ant-design-vue "^3.2.13"
     vue "^3.2.37"
 
 "@netlify/functions@^1.3.0":
@@ -941,10 +941,10 @@ ansi-styles@^6.1.0:
   resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
 
-ant-design-vue@^3.3.0-beta.3:
-  version "3.3.0-beta.3"
-  resolved "https://registry.npmjs.org/ant-design-vue/-/ant-design-vue-3.3.0-beta.3.tgz#8f2ce68d79ded96367068564be26c71bfd77388f"
-  integrity sha512-xA7clMwKRw2S6E8etiq7FRN8qktRW6xr9HBuEuUDQwsbxLIy1kVKfiTbdbh+CklmasKGd9qvEJbzc65U/HJeOw==
+ant-design-vue@^3.2.13:
+  version "3.2.14"
+  resolved "https://registry.npmjs.org/ant-design-vue/-/ant-design-vue-3.2.14.tgz#04684ef9b855380059582a76bc9dd3c937f0fcc3"
+  integrity sha512-v4qeZGpmONUOvz6lyp/fJVoVthqV16CiG1rGrUZVB2IgRjCy59y2/F+RA67ZSJmjGIvqsE+tLoPmjJ0HVXg9XA==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/icons-vue" "^6.1.0"

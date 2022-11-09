@@ -1,4 +1,4 @@
-import { FormSchema } from "@nanta/ui";
+import { FormSchema, VALIDATORS } from "@nanta/ui";
 export const schemes: FormSchema[] = [
   {
     field: 'id',
@@ -18,6 +18,11 @@ export const schemes: FormSchema[] = [
     field: 'email',
     label: "Email",
     component: 'Input',
+    rules: [{
+      trigger:'change',
+      validator: VALIDATORS.email,
+      required: true,
+    }]
   },
   {
     field: 'age',
